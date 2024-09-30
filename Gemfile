@@ -45,3 +45,9 @@ group :test do
 end
 
 gem "rails-controller-testing", "~> 1.0"
+
+gem "jwt", "~> 2.9"
+
+gem "bcrypt", "~> 3.1"
+
+gem "faraday", "~> 2.12"

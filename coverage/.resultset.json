@@ -1,52 +1,21 @@
 {
   "Minitest": {
     "coverage": {
-      "/Users/gabrielpagotto/Desktop/m7academy/contextfy-api/app/controllers/auth_controller.rb": {
+      "/Users/gabrielpagotto/Desktop/m7academy/contextfy-api/app/models/user.rb": {
         "lines": [
           1,
-          null,
+          1,
+          null
+        ]
+      },
+      "/Users/gabrielpagotto/Desktop/m7academy/contextfy-api/app/models/application_record.rb": {
+        "lines": [
           1,
           1,
-          null,
-          null,
-          1,
-          2,
-          1,
-          null,
-          null,
-          null,
-          null,
-          null,
-          1,
-          null,
-          null,
-          null,
-          1,
-          null,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          null,
-          1,
-          null,
-          1,
-          null,
-          null,
-          null,
-          null,
-          null,
-          1,
-          1,
-          1,
-          null,
           null
         ]
       }
     },
-    "timestamp": 1727655025
+    "timestamp": 1727738696
   }
 }
