@@ -1,5 +1,6 @@
 class SpotifyService
-  def initialize(access_token)
+
+  def set_access_token(access_token)
     @access_token = access_token
   end
 
@@ -10,10 +11,14 @@ class SpotifyService
 
   private
 
+  @access_token = nil
   SPOTIFY_API_URL = "https://api.spotify.com/v1"
 
-  def call(path, method, body = nil)
-    Faraday.send(method, "#{SPOTIFY_API_URL}/#{path}") do |req|
+  def call(path, method, body = nil, query_params = {})
+    url = "#{SPOTIFY_API_URL}#{path}"
+    url = "#{url}?#{URI.encode_www_form(query_params)}" unless query_params.empty?
+
+    Faraday.send(method, url) do |req|
       req.headers["Authorization"] = "Bearer #{@access_token}"
       req.headers["Content-Type"] = "application/json"
       req.body = body.to_json if body

@@ -51,3 +51,5 @@ gem "jwt", "~> 2.9"
 gem "bcrypt", "~> 3.1"
 
 gem "faraday", "~> 2.12"
+
+gem "webmock", "~> 3.24"

@@ -1,5 +1,9 @@
 class AuthController < ActionController::Base
 
+  def spotify_service
+    @spotify_service ||= SpotifyService.new
+  end
+
   def spotify_oauth2
     redirect_to spotify_oauth2_url, allow_other_host: true
   end
@@ -10,7 +14,8 @@ class AuthController < ActionController::Base
       token_type = params[:token_type]
       expires_in = params[:expires_in].to_i
 
-      spotify_service = SpotifyService.new(access_token)
+      spotify_service.set_access_token access_token
+
       user_profile = spotify_service.current_user_profile
       sptf_user_id = user_profile["id"]
 

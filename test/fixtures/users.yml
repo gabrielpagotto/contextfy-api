@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  sptf_user_id: MyString
+  sptf_user_id: spotify_user_id_123
 
 two:
   sptf_user_id: MyString
