@@ -10,11 +10,11 @@ class AuthController < ActionController::Base
 
   def spotify_oauth2_callback
     if params[:access_token].present?
-      access_token = params[:access_token]
-      token_type = params[:token_type]
-      expires_in = params[:expires_in].to_i
+      sptf_access_token = params[:access_token]
+      sptf_token_type = params[:token_type]
+      sptf_expires_in = params[:expires_in].to_i
 
-      spotify_service.set_access_token access_token
+      spotify_service.set_access_token sptf_access_token
 
       user_profile = spotify_service.current_user_profile
       sptf_user_id = user_profile["id"]
@@ -24,12 +24,12 @@ class AuthController < ActionController::Base
       if user.present?
         token = generate_token(user.id)
         user.update(
-          sptf_access_token: token,
-          sptf_token_type: token_type,
-          sptf_expires_in: expires_in
+          sptf_access_token: sptf_access_token,
+          sptf_token_type: sptf_token_type,
+          sptf_expires_in: sptf_expires_in
         )
       else
-        user = create_new_user sptf_user_id, token_type, expires_in
+        user = create_new_user sptf_user_id, sptf_token_type, sptf_expires_in
         unless user.save
           return render json: { error: user.errors }, status: :bad_request
         end
