@@ -12,11 +12,11 @@ class ApplicationController < ActionController::API
     token = header.split(" ").last
     decoded = AuthHelper::JsonWebToken.decode(token)
 
-    unless decoded && decoded[:user_id]
+    unless decoded && decoded[:id]
       raise UnauthorizedError, "Invalid token or user ID not found."
     end
 
-    @current_user = User.find(decoded[:user_id])
+    @current_user = User.find(decoded[:id])
 
   rescue => e
     render json: { errors: "Unauthorized" }, status: :unauthorized
@@ -31,8 +31,8 @@ class ApplicationController < ActionController::API
   end
 
   def spotify_service
-    SpotifyService.new do |service|
-      service.set_access_token @current_user.sptf_access_token
-    end
+    s = SpotifyService.new
+    s.set_access_token @current_user.sptf_access_token
+    s
   end
 end

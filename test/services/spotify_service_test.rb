@@ -25,6 +25,33 @@ class SpotifyServiceTest < ActiveSupport::TestCase
     assert_equal "User Name", user_profile["name"]
   end
 
+  def test_search_artist
+    stub_request(:get, "https://api.spotify.com/v1/search")
+      .with(
+        query: { q: "Avenged", type: "artist" },
+        headers: { "Authorization" => "Bearer test_access_token" }
+      )
+      .to_return(status: 200, body: {
+        artists: {
+          items: [
+            {
+              name: "Avenged Sevenfold",
+              id: "12345"
+            }
+          ],
+          limit: 20,
+          href: "https://api.spotify.com/v1/search?q=Avenged&type=artist"
+        }
+      }.to_json, headers: { "Content-Type" => "application/json" })
+
+    @service.set_access_token "test_access_token"
+    response = @service.search "Avenged", :artist
+
+    assert_equal 20, response["artists"]["limit"]
+    assert_equal "https://api.spotify.com/v1/search?q=Avenged&type=artist", response["artists"]["href"]
+    assert_equal "Avenged Sevenfold", response["artists"]["items"][0]["name"]
+  end
+
   def test_handle_response_with_success
     response = OpenStruct.new(status: 200, body: { id: "user_id" }.to_json)
     result = @service.send(:handle_response, response)
@@ -36,8 +63,7 @@ class SpotifyServiceTest < ActiveSupport::TestCase
     response = OpenStruct.new(status: 400, body: { error: "Bad Request" }.to_json)
     result = @service.send(:handle_response, response)
 
-    assert_equal 400, result[:error]
-    assert_equal "Bad Request", result[:message]["error"]
+    assert_equal "spotify", result[:source]
   end
 
   def test_call_method
@@ -46,7 +72,7 @@ class SpotifyServiceTest < ActiveSupport::TestCase
       .to_return(status: 200, body: { success: true }.to_json, headers: { "Content-Type" => "application/json" })
 
     @service.set_access_token("test_access_token")
-    response = @service.send(:call, "/test", :get)
+    response = @service.send(:call, "/v1/test", :get)
 
     assert_equal true, JSON.parse(response.body)["success"]
   end

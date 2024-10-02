@@ -3,7 +3,7 @@ require "test_helper"
 class ApplicationControllerTest < ActionController::TestCase
   def setup
     @user = users(:one)
-    @token = AuthHelper::JsonWebToken.encode(user_id: @user.id)
+    @token = AuthHelper::JsonWebToken.encode(id: @user.id)
     @headers = { "Authorization" => "Bearer #{@token}" }
   end
 
@@ -52,6 +52,7 @@ class ApplicationControllerTest < ActionController::TestCase
 
   def test_spotify_service
     @controller.instance_variable_set(:@current_user, @user)
+    get :auth_check
     spotify_service = @controller.spotify_service
     assert_instance_of SpotifyService, spotify_service
     assert_not_nil @user.sptf_access_token

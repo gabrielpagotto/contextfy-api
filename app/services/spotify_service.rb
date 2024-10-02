@@ -1,29 +1,38 @@
 class SpotifyService
 
+  def initialize
+    @conn = Faraday.new(url: "#{SPOTIFY_API_URL}") do |faraday|
+      faraday.adapter Faraday.default_adapter
+    end
+  end
+
   def set_access_token(access_token)
     @access_token = access_token
   end
 
   def current_user_profile
-    response = call "/me", :get
+    response = call "/v1/me", :get
     handle_response response
   end
 
+  SEARCH_TYPES = {
+    artist: "artist",
+    gender: "gender"
+  }.freeze
+
   def search(q, type)
-    response = call "/search", :get, query: { q: q, type: type }
+    raise ArgumentError, "Invalid type" unless SEARCH_TYPES.key?(type)
+    response = call "/v1/search", :get, nil, { q: q, type: SEARCH_TYPES[type] }
     handle_response response
   end
 
   private
 
-  @access_token = nil
-  SPOTIFY_API_URL = "https://api.spotify.com/v1"
+  @access_token
+  SPOTIFY_API_URL = "https://api.spotify.com"
 
-  def call(path, method, body = nil, query_params = {})
-    url = "#{SPOTIFY_API_URL}#{path}"
-    url = "#{url}?#{URI.encode_www_form(query_params)}" unless query_params.empty?
-
-    Faraday.send(method, url) do |req|
+  def call(path, method, body = nil, params = {}, headers = {})
+    @conn.send(method, path, params) do |req|
       req.headers["Authorization"] = "Bearer #{@access_token}"
       req.headers["Content-Type"] = "application/json"
       req.body = body.to_json if body
@@ -34,7 +43,7 @@ class SpotifyService
     if response.status == 200
       JSON.parse(response.body)
     else
-      { error: response.status, message: JSON.parse(response.body) }
+      { source: "spotify", **JSON.parse(response.body) }
     end
   end
 end
