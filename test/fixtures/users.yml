@@ -2,6 +2,7 @@
 
 one:
   sptf_user_id: spotify_user_id_123
+  sptf_access_token: spotify_user_access_token
 
 two:
   sptf_user_id: MyString

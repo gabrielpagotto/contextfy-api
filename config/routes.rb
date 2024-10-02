@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  get "auth_check" => "application#auth_check"
 
   get "auth/spotify/oauth2" => "auth#spotify_oauth2"
   get "auth/spotify/oauth2/callback" => "auth#spotify_oauth2_callback"

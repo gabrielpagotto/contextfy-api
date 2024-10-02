@@ -9,6 +9,11 @@ class SpotifyService
     handle_response response
   end
 
+  def search(q, type)
+    response = call "/search", :get, query: { q: q, type: type }
+    handle_response response
+  end
+
   private
 
   @access_token = nil

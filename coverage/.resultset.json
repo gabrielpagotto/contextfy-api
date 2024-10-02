@@ -15,6 +15,69 @@
           null
         ]
       },
+      "/Users/gabrielpagotto/Desktop/m7academy/contextfy-api/app/controllers/application_controller.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          4,
+          1,
+          null,
+          null,
+          3,
+          3,
+          3,
+          null,
+          3,
+          1,
+          null,
+          null,
+          2,
+          null,
+          null,
+          3,
+          null,
+          null,
+          1,
+          2,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          0,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/gabrielpagotto/Desktop/m7academy/contextfy-api/app/helpers/auth_helper.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          14,
+          14,
+          null,
+          null,
+          1,
+          7,
+          4,
+          null,
+          3,
+          null,
+          null,
+          null
+        ]
+      },
       "/Users/gabrielpagotto/Desktop/m7academy/contextfy-api/app/services/spotify_service.rb": {
         "lines": [
           1,
@@ -29,6 +92,11 @@
           null,
           null,
           1,
+          0,
+          0,
+          null,
+          null,
+          1,
           null,
           1,
           1,
@@ -49,27 +117,6 @@
           2,
           null,
           1,
-          null,
-          null,
-          null
-        ]
-      },
-      "/Users/gabrielpagotto/Desktop/m7academy/contextfy-api/app/helpers/auth_helper.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null,
-          1,
-          6,
-          6,
-          null,
-          null,
-          1,
-          4,
-          2,
-          null,
-          2,
           null,
           null,
           null
@@ -160,7 +207,7 @@
         ]
       }
     },
-    "timestamp": 1727749997
+    "timestamp": 1727834833
   },
   "RSpec": {
     "coverage": {
