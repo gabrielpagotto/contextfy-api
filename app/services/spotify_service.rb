@@ -20,9 +20,24 @@ class SpotifyService
     gender: "gender"
   }.freeze
 
+  TOP_ITEMS_TYPES = {
+    artists: "artists"
+  }.freeze
+
   def search(q, type)
     raise ArgumentError, "Invalid type" unless SEARCH_TYPES.key?(type)
     response = call "/v1/search", :get, nil, { q: q, type: SEARCH_TYPES[type] }
+    handle_response response
+  end
+
+  def top_items(type)
+    raise ArgumentError, "Invalid type" unless TOP_ITEMS_TYPES.key?(type)
+    response = call "/v1/me/top/#{type}", :get
+    handle_response response
+  end
+
+  def get_several_artists(sptf_ids)
+    response = call "/v1/artists", :get, nil, { ids: sptf_ids.join(",") }
     handle_response response
   end
 
@@ -43,7 +58,17 @@ class SpotifyService
     if response.status == 200
       JSON.parse(response.body)
     else
-      { source: "spotify", **JSON.parse(response.body) }
+      raise SpotifyServiceError.new("An error occurred with Spotify Service", response.status, JSON.parse(response.body))
     end
+  end
+end
+
+class SpotifyServiceError < StandardError
+  attr_reader :status, :body
+
+  def initialize(msg, status = nil, body = nil)
+    @status = status
+    @body = body
+    super(msg)
   end
 end

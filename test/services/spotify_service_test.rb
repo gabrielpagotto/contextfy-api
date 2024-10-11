@@ -61,9 +61,13 @@ class SpotifyServiceTest < ActiveSupport::TestCase
 
   def test_handle_response_with_error
     response = OpenStruct.new(status: 400, body: { error: "Bad Request" }.to_json)
-    result = @service.send(:handle_response, response)
 
-    assert_equal "spotify", result[:source]
+    error = assert_raises(SpotifyServiceError) do
+      @service.send(:handle_response, response)
+    end
+
+    assert_equal error.status, 400
+    assert_equal "Bad Request", error.body["error"]
   end
 
   def test_call_method

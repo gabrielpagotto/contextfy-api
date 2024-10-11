@@ -12,5 +12,11 @@ Rails.application.routes.draw do
   get "auth/spotify/oauth2" => "auth#spotify_oauth2"
   get "auth/spotify/oauth2/callback" => "auth#spotify_oauth2_callback"
 
+  get "profile/me" => "profile#me"
+
+  get "artists" => "artists#index"
+  get "artists/suggestions" => "artists#suggestions"
   get "artists/search" => "artists#search"
+  post "artists" => "artists#create"
+  delete "artists/:id" => "artists#destroy"
 end

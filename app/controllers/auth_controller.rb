@@ -29,7 +29,7 @@ class AuthController < ActionController::Base
           sptf_expires_in: sptf_expires_in
         )
       else
-        user = create_new_user sptf_user_id, sptf_token_type, sptf_expires_in
+        user = create_new_user sptf_user_id, sptf_access_token, sptf_token_type, sptf_expires_in
         unless user.save
           return render json: { error: user.errors }, status: :bad_request
         end
@@ -50,14 +50,14 @@ class AuthController < ActionController::Base
   CLIENT_SECRET = "6e893b895057419a869fc70291fdcbb2"
   REDIRECT_URI = "http://localhost:3000/auth/spotify/oauth2/callback"
   RESPONSE_TYPE = "token"
-  SCOPES = "user-read-private"
+  SCOPE = "user-read-private user-top-read"
 
   def spotify_oauth2_url
     params = {
       "response_type" => RESPONSE_TYPE,
       "client_id" => CLIENT_ID,
       "redirect_uri" => REDIRECT_URI,
-      "scopes" => SCOPES
+      "scope" => SCOPE
     }
 
     base_url = URI.join(AUTH_HOST, "/authorize")
@@ -69,12 +69,12 @@ class AuthController < ActionController::Base
     AuthHelper::JsonWebToken.encode({ id: user_id })
   end
 
-  def create_new_user(sptf_user_id, token_type, expires_in)
+  def create_new_user(sptf_user_id, sptf_access_token, sptf_token_type, sptf_expires_in)
     User.new(
       sptf_user_id: sptf_user_id,
-      sptf_access_token: generate_token(nil),
-      sptf_token_type: token_type,
-      sptf_expires_in: expires_in
+      sptf_access_token: sptf_access_token,
+      sptf_token_type: sptf_token_type,
+      sptf_expires_in: sptf_expires_in
     )
   end
 end

@@ -2,6 +2,7 @@ require "jwt"
 
 class ApplicationController < ActionController::API
   before_action :authorize_request
+  rescue_from SpotifyServiceError, with: :handle_spotify_service_error
 
   def authorize_request
     unless request.headers["Authorization"].present?
@@ -34,5 +35,12 @@ class ApplicationController < ActionController::API
     s = SpotifyService.new
     s.set_access_token @current_user.sptf_access_token
     s
+  end
+
+  def handle_spotify_service_error(exception)
+    if exception.status == 401
+      render json: { errors: "Unauthorized" }, status: :unauthorized
+    end
+    render json: exception.body, status: exception.status
   end
 end
