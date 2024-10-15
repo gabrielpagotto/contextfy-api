@@ -41,6 +41,11 @@ class SpotifyService
     handle_response response
   end
 
+  def get_genres_suggestions
+    response = call "/v1/recommendations/available-genre-seeds", :get
+    handle_response response
+  end
+
   private
 
   @access_token

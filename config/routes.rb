@@ -19,4 +19,10 @@ Rails.application.routes.draw do
   get "artists/search" => "artists#search"
   post "artists" => "artists#create"
   delete "artists/:id" => "artists#destroy"
+
+
+  get "genres" => "gender#index"
+  get "genres/suggestions" => "gender#suggestions"
+  post "genres" => "gender#create"
+  delete "genres/:id" => "gender#destroy"
 end
