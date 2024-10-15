@@ -3,4 +3,5 @@ class User < ApplicationRecord
 
   has_many :artists
   has_many :genders
+  has_many :contexts
 end

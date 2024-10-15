@@ -1,0 +1,13 @@
+
+one:
+  name: Context1
+  latitude: 17.7928
+  longitude: 50.9196
+  user: one
+
+two:
+  name: Context2
+  latitude: 17.7928
+  longitude: 50.9196
+  user: two
+
