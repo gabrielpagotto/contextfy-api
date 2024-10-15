@@ -86,7 +86,7 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
     assert user.new_record?, "User should be a new record"
     assert_equal "new_sptf_user_id", user.sptf_user_id
     assert_equal sptf_token_type, user.sptf_token_type
-    assert_equal expires_in, user.sptf_expires_in
+    assert_equal sptf_expires_in, user.sptf_expires_in
   end
 
   test "spotify_oauth2_url should return a valid URL" do
@@ -96,6 +96,6 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
     assert_match /response_type=token/, url, "URL should contain response_type parameter"
     assert_match /client_id=#{@controller.class::CLIENT_ID}/, url, "URL should contain client_id parameter"
     assert_match /redirect_uri=#{CGI.escape(@controller.class::REDIRECT_URI)}/, url, "URL should contain redirect_uri parameter"
-    assert_match /scopes=user-read-private/, url, "URL should contain scopes parameter"
+    assert_match /scope=user-read-private\+user-top-read/, url, "URL should contain scopes parameter"
   end
 end
