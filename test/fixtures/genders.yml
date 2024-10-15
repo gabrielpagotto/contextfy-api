@@ -1,0 +1,10 @@
+
+one:
+  name: gender_1
+  sptf_gender_id: sptf_gender_id_123
+  user: one
+
+two:
+  name: gender_2
+  sptf_gender_id: sptf_gender_id_123
+  user: two
