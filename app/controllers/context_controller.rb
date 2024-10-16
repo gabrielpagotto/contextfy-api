@@ -1,6 +1,31 @@
 class ContextController < ApplicationController
+  include ContextHelper
+
   def index
     render json: current_user.contexts.where(deleted_at: nil)
+  end
+
+  def current
+    required_params = %i[latitude longitude radius]
+    missing_params = required_params.select { |param| !params[param].present? }
+
+    if missing_params.any?
+      render json: { error: "Param(s) #{missing_params.join(', ')} is/are required." }, status: :bad_request
+      return
+    end
+
+    radius = params[:radius].to_i
+    c_lat, c_lng = params[:latitude].to_f, params[:longitude].to_f
+
+    user_contexts = current_user.contexts.where(deleted_at: nil)
+    user_contexts.each do |user_context|
+      if HaversineCalculator.haversine_distance(c_lat, c_lng, user_context.latitude, user_context.longitude) <= radius
+        render json: user_context
+        return
+      end
+    end
+
+    render json: { details: "No context found within #{radius} meters." }, status: :bad_request
   end
 
   def create

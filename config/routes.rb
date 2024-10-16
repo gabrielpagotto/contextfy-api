@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   delete "genres/:id" => "gender#destroy"
 
   get "contexts" => "context#index"
+  get "contexts/current" => "context#current"
   post "contexts" => "context#create"
   delete "contexts/:id" => "context#destroy"
 end
