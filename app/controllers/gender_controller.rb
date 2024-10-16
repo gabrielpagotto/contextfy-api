@@ -2,7 +2,7 @@ class GenderController < ApplicationController
   include GenderHelper
 
   def index
-    persisted_genders = Gender.where(user_id: current_user.id, deleted_at: nil)
+    persisted_genders = current_user.genders.where(deleted_at: nil)
     unless persisted_genders.any?
       render json: []
       return
@@ -12,7 +12,7 @@ class GenderController < ApplicationController
 
   def suggestions
     sptf_gender_ids = available_genders
-    persisted_genders = Gender.where(user_id: current_user.id, sptf_gender_id: sptf_gender_ids, deleted_at: nil)
+    persisted_genders = current_user.genders.where(sptf_gender_id: sptf_gender_ids, deleted_at: nil)
     render json: map_genders(sptf_gender_ids, persisted_genders)
   end
 
@@ -21,7 +21,7 @@ class GenderController < ApplicationController
     errors = []
     ActiveRecord::Base.transaction do
       params[:sptf_gender_ids].each do |sptf_gender_id|
-        gender = Gender.find_or_create_by(sptf_gender_id: sptf_gender_id, user_id: current_user.id, deleted_at: nil)
+        gender = current_user.genders.find_or_create_by(sptf_gender_id: sptf_gender_id, deleted_at: nil)
         unless gender.persisted?
           errors.push(gender.errors.full_messages)
           raise ActiveRecord::Rollback
@@ -39,7 +39,7 @@ class GenderController < ApplicationController
   end
 
   def destroy
-    gender = Gender.find(params[:id])
+    gender = current_user.genders.where(deleted_at: nil).find(params[:id])
     if gender.update(deleted_at: Time.now)
       render json: gender, status: :no_content
     else

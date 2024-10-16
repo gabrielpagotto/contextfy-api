@@ -1,7 +1,7 @@
 class ArtistsController < ApplicationController
 
   def index
-    persisted_artists = Artist.where(user_id: current_user.id, deleted_at: nil)
+    persisted_artists = current_user.artists.where(deleted_at: nil)
     unless persisted_artists.any?
       render json: []
       return
@@ -13,7 +13,7 @@ class ArtistsController < ApplicationController
   def suggestions
     result = spotify_service.top_items(:artists)
     sptf_artist_ids = result["items"].map { |item| item["id"] }
-    persisted_artists = Artist.where(user_id: current_user.id, sptf_artist_id: sptf_artist_ids, deleted_at: nil)
+    persisted_artists = current_user.artists.where(sptf_artist_id: sptf_artist_ids, deleted_at: nil)
     render json: map_artists(result["items"], persisted_artists)
   end
 
@@ -25,7 +25,7 @@ class ArtistsController < ApplicationController
 
     result = spotify_service.search(params[:q], :artist)
     sptf_artist_ids = result["artists"]["items"].map { |item| item["id"] }
-    persisted_artists = Artist.where(user_id: current_user.id, sptf_artist_id: sptf_artist_ids, deleted_at: nil)
+    persisted_artists = current_user.artists.where(sptf_artist_id: sptf_artist_ids, deleted_at: nil)
     render json: map_artists(result["artists"]["items"], persisted_artists)
   end
 
@@ -34,7 +34,7 @@ class ArtistsController < ApplicationController
     errors = []
     ActiveRecord::Base.transaction do
       params[:sptf_artist_ids].each do |sptf_artist_id|
-        artist = Artist.find_or_create_by(sptf_artist_id: sptf_artist_id, user_id: current_user.id, deleted_at: nil)
+        artist = current_user.artists.find_or_create_by(sptf_artist_id: sptf_artist_id, deleted_at: nil)
         unless artist.persisted?
           errors.push(artist.errors.full_messages)
           raise ActiveRecord::Rollback
@@ -53,7 +53,7 @@ class ArtistsController < ApplicationController
   end
 
   def destroy
-    artist = Artist.find(params[:id])
+    artist = current_user.artists.where(deleted_at: nil).find(params[:id])
     if artist.update(deleted_at: Time.now)
       render json: artist, status: :no_content
     else
