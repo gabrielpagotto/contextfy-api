@@ -46,6 +46,19 @@ class SpotifyService
     handle_response response
   end
 
+  def get_recommendations(limit, seed_artists, seed_genres)
+    response = call "/v1/recommendations", :get, nil, {
+      seed_artists: seed_artists.join(","),
+      seed_genres: seed_genres.join(","),
+      limit: limit,
+      market: "BR",
+      min_popularity: 60,
+      max_popularity: 100,
+      target_popularity: 90
+    }
+    handle_response response
+  end
+
   private
 
   @access_token

@@ -32,19 +32,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_15_202607) do
   end
 
   create_table "genders", force: :cascade do |t|
-    t.string "name"
     t.string "sptf_gender_id"
     t.integer "user_id", null: false
     t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_genders_on_user_id"
-  end
-
-  create_table "genres", force: :cascade do |t|
-    t.string "name"
-    t.string "sptf_gender_id"
-    t.integer "user_id", null: false
-    t.datetime "deleted_at"
-    t.index ["user_id"], name: "index_genres_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -60,5 +53,4 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_15_202607) do
   add_foreign_key "artists", "users"
   add_foreign_key "contexts", "users"
   add_foreign_key "genders", "users"
-  add_foreign_key "genres", "users"
 end

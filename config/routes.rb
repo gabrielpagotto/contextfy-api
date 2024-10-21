@@ -29,4 +29,6 @@ Rails.application.routes.draw do
   get "contexts/current" => "context#current"
   post "contexts" => "context#create"
   delete "contexts/:id" => "context#destroy"
+
+  get "recommendations" => "recommendations#index"
 end

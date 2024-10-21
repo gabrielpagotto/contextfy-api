@@ -4,6 +4,8 @@ class CreateGenders < ActiveRecord::Migration[7.2]
       t.string :sptf_gender_id
       t.references :user, null: false, foreign_key: { to_table: :users }
       t.datetime :deleted_at
+
+      t.timestamps
     end
   end
 end
