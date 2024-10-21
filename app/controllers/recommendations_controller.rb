@@ -4,7 +4,11 @@ class RecommendationsController < ApplicationController
 
     artists = current_user.artists.where(deleted_at: nil).order(created_at: :asc).limit(3)
     genres = current_user.genders.where(deleted_at: nil).order(created_at: :asc).limit(2)
-    recommendations = spotify_service.get_recommendations 60, artists.pluck(:sptf_artist_id), genres.pluck(:sptf_gender_id)
+
+    recommendations = spotify_service.get_recommendations(limit: 60, market: "BR", min_popularity: 60, max_popularity: 100,
+                                                          target_popularity: 90,
+                                                          seed_artists: artists.pluck(:sptf_artist_id).join(","),
+                                                          seed_genres: genres.pluck(:sptf_gender_id).join(","))
 
     tracks = recommendations["tracks"].select { |track|
       track["type"] == "track" && track["is_playable"] && track["preview_url"].present?
