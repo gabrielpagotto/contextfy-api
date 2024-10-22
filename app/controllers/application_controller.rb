@@ -40,7 +40,8 @@ class ApplicationController < ActionController::API
   def handle_spotify_service_error(exception)
     if exception.status == 401
       render json: { errors: "Unauthorized" }, status: :unauthorized
+    else
+      render json: exception.body, status: exception.status
     end
-    render json: exception.body, status: exception.status
   end
 end

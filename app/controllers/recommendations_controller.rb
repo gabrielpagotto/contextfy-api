@@ -14,16 +14,19 @@ class RecommendationsController < ApplicationController
       track["type"] == "track" && track["is_playable"] && track["preview_url"].present?
     }
 
+    rated_tracks = current_user.rated_tracks.where(sptf_track_id: tracks.pluck("id"), deleted_at: nil)
+
     render json: tracks.map { |track| {
-      id: track["id"],
+      sptf_track_id: track["id"],
       name: track["name"],
       preview_url: track["preview_url"],
       uri: track["uri"],
       type: track["type"],
       images: track["album"]["images"],
+      rate: rated_tracks.find { |rated_track| rated_track.sptf_track_id == track["id"] },
       artists: track["artists"].map { |artist| {
-        id: artist["id"],
-        name: artist["name"],
+        sptf_artist_id: artist["id"],
+        name: artist["name"]
       } }
     } }
   end

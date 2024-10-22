@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_15_202607) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_21_222526) do
   create_table "artists", force: :cascade do |t|
     t.string "sptf_artist_id"
     t.integer "user_id", null: false
@@ -40,6 +40,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_15_202607) do
     t.index ["user_id"], name: "index_genders_on_user_id"
   end
 
+  create_table "rated_tracks", force: :cascade do |t|
+    t.string "sptf_track_id", null: false
+    t.integer "rate"
+    t.integer "user_id", null: false
+    t.integer "context_id", null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["context_id"], name: "index_rated_tracks_on_context_id"
+    t.index ["user_id"], name: "index_rated_tracks_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "sptf_user_id"
     t.string "sptf_access_token"
@@ -53,4 +65,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_15_202607) do
   add_foreign_key "artists", "users"
   add_foreign_key "contexts", "users"
   add_foreign_key "genders", "users"
+  add_foreign_key "rated_tracks", "contexts"
+  add_foreign_key "rated_tracks", "users"
 end

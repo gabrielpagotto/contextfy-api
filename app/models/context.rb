@@ -4,4 +4,5 @@ class Context < ApplicationRecord
   validates :longitude, presence: true
 
   belongs_to :user
+  has_many :rated_tracks
 end
