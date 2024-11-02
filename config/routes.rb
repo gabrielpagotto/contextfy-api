@@ -27,4 +27,10 @@ Rails.application.routes.draw do
   get "recommendations" => "recommendations#index"
 
   post "rates/track/toggle" => "rated_tracks#toggle"
+
+  get "playlists" => "playlist#index"
+  get "playlists/suggestions" => "playlist#suggestions"
+  get "playlists/search" => "playlist#search"
+  post "playlists" => "playlist#create"
+  delete "playlists/:id" => "playlist#destroy"
 end

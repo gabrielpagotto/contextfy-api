@@ -1,0 +1,7 @@
+one:
+  sptf_playlist_id: fake_playlist
+  user: one
+
+two:
+  sptf_playlist_id: fake_playlist
+  user: one

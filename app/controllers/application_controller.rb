@@ -2,7 +2,7 @@ require "jwt"
 
 class ApplicationController < ActionController::API
   before_action :authorize_request
-  rescue_from SpotifyServiceError, with: :handle_spotify_service_error
+  # rescue_from SpotifyServiceError, with: :handle_spotify_service_error
 
   def authorize_request
     unless request.headers["Authorization"].present?

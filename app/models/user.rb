@@ -5,4 +5,5 @@ class User < ApplicationRecord
   has_many :genders
   has_many :contexts
   has_many :rated_tracks
+  has_many :playlists
 end

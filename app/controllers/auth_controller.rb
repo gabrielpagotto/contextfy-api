@@ -55,7 +55,7 @@ class AuthController < ActionController::Base
   CLIENT_ID = "03b500d0fcec4a208cafa9170786c526"
   CLIENT_SECRET = "5166294390634aeb9c9ca92a209d68cb"
 
-  REDIRECT_URI = "http://192.168.20.12:3000/auth/spotify/oauth2/callback"
+  REDIRECT_URI = "http://localhost:3000/auth/spotify/oauth2/callback"
   RESPONSE_TYPE = "token"
   SCOPE = "user-read-private user-top-read"
 

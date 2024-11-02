@@ -17,7 +17,8 @@ class SpotifyService
 
   SEARCH_TYPES = {
     artist: "artist",
-    gender: "gender"
+    gender: "gender",
+    playlist: "playlist"
   }.freeze
 
   TOP_ITEMS_TYPES = {
@@ -48,6 +49,17 @@ class SpotifyService
 
   def get_recommendations(options)
     response = call "/v1/recommendations", :get, nil, options
+    handle_response response
+  end
+
+  def get_playlist(sptf_playlist_id)
+    response = call "/v1/playlists/#{sptf_playlist_id}", :get
+    handle_response response
+  end
+
+  def get_featured_playlists
+    response = call "/v1/browse/featured-playlists", :get, nil, {
+      locale: "pt_BR", limit: 20, offset: 1 }
     handle_response response
   end
 

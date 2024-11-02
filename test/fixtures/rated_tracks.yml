@@ -1,10 +1,12 @@
 one:
   rate: 3
+  sptf_track_id: fake_sptf_track_id
   user: one
   context: one
 
 two:
   rate: 3
+  sptf_track_id: fake_sptf_track_id
   user: two
   context: two
 
