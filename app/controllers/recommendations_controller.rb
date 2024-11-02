@@ -40,6 +40,8 @@ class RecommendationsController < ApplicationController
       track["type"] == "track" && track["is_playable"] && track["preview_url"].present?
     }
 
+    tracks = tracks.uniq { |track| track["id"] }
+
     rated_tracks = current_user.rated_tracks.where(sptf_track_id: tracks.pluck("id"), deleted_at: nil)
 
     render json: tracks.map { |track| {
