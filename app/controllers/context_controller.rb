@@ -18,11 +18,19 @@ class ContextController < ApplicationController
     c_lat, c_lng = params[:latitude].to_f, params[:longitude].to_f
 
     user_contexts = current_user.contexts.where(deleted_at: nil)
+    context_minus_distance = nil
+    last_distance = radius + 1
     user_contexts.each do |user_context|
-      if HaversineCalculator.haversine_distance(c_lat, c_lng, user_context.latitude, user_context.longitude) <= radius
-        render json: user_context
-        return
+      distance = HaversineCalculator.haversine_distance(c_lat, c_lng, user_context.latitude, user_context.longitude)
+      if distance <= radius && distance < last_distance
+        last_distance = distance
+        context_minus_distance = user_context
       end
+    end
+
+    if context_minus_distance.present?
+      render json: context_minus_distance
+      return
     end
 
     render json: { details: "No context found within #{radius} meters." }, status: :bad_request
