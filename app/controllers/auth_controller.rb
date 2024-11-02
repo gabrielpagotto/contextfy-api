@@ -44,20 +44,13 @@ class AuthController < ActionController::Base
 
   private
 
-  API_HOST = "https://api.spotify.com"
-  AUTH_HOST = "https://accounts.spotify.com"
-
-  # ContextFy
-  # CLIENT_ID = "32719c0e79af41f68efd36ff156ec3f1"
-  # CLIENT_SECRET = "6e893b895057419a869fc70291fdcbb2"
-
-  # ContextFy
-  CLIENT_ID = "03b500d0fcec4a208cafa9170786c526"
-  CLIENT_SECRET = "5166294390634aeb9c9ca92a209d68cb"
-
-  REDIRECT_URI = "http://localhost:3000/auth/spotify/oauth2/callback"
-  RESPONSE_TYPE = "token"
-  SCOPE = "user-read-private user-top-read"
+  API_HOST = ENV["SPOTIFY_API_HOST"]
+  AUTH_HOST = ENV["SPOTIFY_AUTH_HOST"]
+  CLIENT_ID = ENV["SPOTIFY_CLIENT_ID"]
+  CLIENT_SECRET = ENV["SPOTIFY_CLIENT_SECRET"]
+  REDIRECT_URI = ENV["SPOTIFY_REDIRECT_URI"]
+  RESPONSE_TYPE = ENV["SPOTIFY_RESPONSE_TYPE"]
+  SCOPE = ENV["SPOTIFY_SCOPE"]
 
   def spotify_oauth2_url
     params = {

@@ -11,9 +11,12 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.2].define(version: 2024_10_28_132307) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "artists", force: :cascade do |t|
     t.string "sptf_artist_id"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -24,7 +27,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_132307) do
     t.string "name"
     t.float "latitude"
     t.float "longitude"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -33,7 +36,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_132307) do
 
   create_table "genders", force: :cascade do |t|
     t.string "sptf_gender_id"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -42,7 +45,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_132307) do
 
   create_table "playlists", force: :cascade do |t|
     t.string "sptf_playlist_id"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -52,8 +55,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_28_132307) do
   create_table "rated_tracks", force: :cascade do |t|
     t.string "sptf_track_id", null: false
     t.integer "rate"
-    t.integer "user_id", null: false
-    t.integer "context_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "context_id", null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
