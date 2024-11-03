@@ -41,8 +41,7 @@ class RecommendationsController < ApplicationController
     }
 
     tracks = tracks.uniq { |track| track["id"] }
-
-    rated_tracks = current_user.rated_tracks.where(sptf_track_id: tracks.pluck("id"), deleted_at: nil)
+    rated_tracks = context&.rated_tracks&.where(sptf_track_id: tracks.pluck("id"), deleted_at: nil) || []
 
     render json: tracks.map { |track| {
       sptf_track_id: track["id"],
