@@ -11,18 +11,13 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should redirect to Spotify OAuth2 URL" do
-    original_env = ENV.to_h
-
     get auth_spotify_oauth2_url
     assert_response :redirect
     assert_match %r{^https://fictitious-accounts\.spotify\.com/authorize\?}, response.location
-
-  ensure
-    original_env.each { |key, value| ENV[key] = value }
   end
 
   test "should handle spotify oauth2 callback and create new user" do
-    @spotify_service_mock.expect :set_access_token, nil, ["fake_access_token"]
+    @spotify_service_mock.expect :set_access_token, nil, [ "fake_access_token" ]
     @spotify_service_mock.expect :current_user_profile, @user_profile
 
     SpotifyService.stub :new, @spotify_service_mock do
@@ -46,7 +41,7 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update existing user on spotify oauth2 callback" do
-    @spotify_service_mock.expect :set_access_token, nil, ["fake_access_token"]
+    @spotify_service_mock.expect :set_access_token, nil, [ "fake_access_token" ]
     @spotify_service_mock.expect :current_user_profile, { "id" => @existing_user.sptf_user_id }
 
     SpotifyService.stub :new, @spotify_service_mock do
