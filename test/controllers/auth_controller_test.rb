@@ -3,6 +3,14 @@ require "minitest/mock"
 
 class AuthControllerTest < ActionDispatch::IntegrationTest
   setup do
+    ENV["SPOTIFY_API_HOST"] = "https://fictitious-api.spotify.com"
+    ENV["SPOTIFY_AUTH_HOST"] = "https://fictitious-accounts.spotify.com"
+    ENV["SPOTIFY_CLIENT_ID"] = "test_client_id"
+    ENV["SPOTIFY_CLIENT_SECRET"] = "test_client_secret"
+    ENV["SPOTIFY_REDIRECT_URI"] = "http://localhost:3000/auth/spotify/oauth2/test_callback"
+    ENV["SPOTIFY_RESPONSE_TYPE"] = "code"
+    ENV["SPOTIFY_SCOPE"] = "user-read-email user-library-read"
+
     @spotify_service_mock = Minitest::Mock.new
     @user_profile = { "id" => "spotify_user_id_123" }
     @existing_user = users(:one)
