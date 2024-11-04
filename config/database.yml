@@ -2,18 +2,18 @@ default: &default
   adapter: <%= ENV.fetch("DATABASE_ADAPTER", "postgresql") %>
   pool: <%= ENV.fetch("DATABASE_POOL", 5) %>
   timeout: <%= ENV.fetch("DATABASE_TIMEOUT", 5000) %>
-  username: <%= ENV.fetch("DATABASE_USER") %>
-  password: <%= ENV.fetch("DATABASE_PASSWORD") %>
-  host: <%= ENV.fetch("DATABASE_HOST") %>
-  port: <%= ENV.fetch("DATABASE_PORT") %>
-  database: <%= ENV.fetch("DATABASE_NAME") %>
+  username: <%= ENV["DATABASE_USER"] %>
+  password: <%= ENV["DATABASE_PASSWORD"] %>
+  host: <%= ENV["DATABASE_HOST"] %>
+  port: <%= ENV["DATABASE_PORT"] %>
+  database: <%= ENV["DATABASE_NAME"] %>
 
 development:
   <<: *default
 
 test:
   adapter: sqlite3
-  database: storage/test.sqlite3
+  database: db/test.sqlite3
   pool: 5
   timeout: 5000
 

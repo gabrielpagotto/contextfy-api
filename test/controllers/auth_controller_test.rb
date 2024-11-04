@@ -11,13 +11,18 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should redirect to Spotify OAuth2 URL" do
+    original_env = ENV.to_h
+
     get auth_spotify_oauth2_url
     assert_response :redirect
-    assert_match %r{^https://accounts\.spotify\.com/authorize\?}, response.location
+    assert_match %r{^https://fictitious-accounts\.spotify\.com/authorize\?}, response.location
+
+  ensure
+    original_env.each { |key, value| ENV[key] = value }
   end
 
   test "should handle spotify oauth2 callback and create new user" do
-    @spotify_service_mock.expect :set_access_token, nil, [ "fake_access_token" ]
+    @spotify_service_mock.expect :set_access_token, nil, ["fake_access_token"]
     @spotify_service_mock.expect :current_user_profile, @user_profile
 
     SpotifyService.stub :new, @spotify_service_mock do
@@ -41,7 +46,7 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update existing user on spotify oauth2 callback" do
-    @spotify_service_mock.expect :set_access_token, nil, [ "fake_access_token" ]
+    @spotify_service_mock.expect :set_access_token, nil, ["fake_access_token"]
     @spotify_service_mock.expect :current_user_profile, { "id" => @existing_user.sptf_user_id }
 
     SpotifyService.stub :new, @spotify_service_mock do
@@ -92,10 +97,10 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
   test "spotify_oauth2_url should return a valid URL" do
     url = @controller.send(:spotify_oauth2_url)
 
-    assert_match /https:\/\/accounts\.spotify\.com\/authorize/, url, "URL should contain Spotify authorization endpoint"
-    assert_match /response_type=token/, url, "URL should contain response_type parameter"
-    assert_match /client_id=#{@controller.class::CLIENT_ID}/, url, "URL should contain client_id parameter"
-    assert_match /redirect_uri=#{CGI.escape(@controller.class::REDIRECT_URI)}/, url, "URL should contain redirect_uri parameter"
-    assert_match /scope=user-read-private\+user-top-read/, url, "URL should contain scopes parameter"
+    assert_match /https:\/\/fictitious-accounts\.spotify\.com\/authorize/, url, "URL should contain Spotify authorization endpoint"
+    assert_match /response_type=code/, url, "URL should contain response_type parameter"
+    assert_match /client_id=test_client_id/, url, "URL should contain client_id parameter"
+    assert_match /redirect_uri=#{CGI.escape("http://localhost:3000/auth/spotify/oauth2/test_callback")}/, url, "URL should contain redirect_uri parameter"
+    assert_match /scope=user-read-email\+user-library-read/, url, "URL should contain scopes parameter"
   end
 end
