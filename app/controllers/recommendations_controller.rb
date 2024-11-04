@@ -10,17 +10,33 @@ class RecommendationsController < ApplicationController
                                                             seed_tracks: rated_tracks.take(5).pluck(:sptf_track_id).join(","))
       recommendations = recommendations["tracks"]
     else
-      artists = current_user.artists.where(deleted_at: nil).order(Arel.sql("RANDOM()")).limit(4)
+      artists = current_user.artists.where(deleted_at: nil).order(Arel.sql("RANDOM()")).limit(3)
       genres = current_user.genders.where(deleted_at: nil).order(Arel.sql("RANDOM()")).limit(1)
 
-      artist_gender_recommendations = spotify_service.get_recommendations(limit: 60, market: "BR", min_popularity: 60, max_popularity: 100,
-                                                                          target_popularity: 90,
-                                                                          seed_artists: artists.pluck(:sptf_artist_id).join(","),
-                                                                          seed_genres: genres.pluck(:sptf_gender_id).join(","))
+      unless artists.present? && genres.present? && artists.length > 3 && genres.length
+        render json: { "details": "To generate recommendations it is necessary to register at least 3 artists and 3 genres." }, status: :bad_request
+        return
+      end
+
+      if artists.present? || genres.present?
+        params = { limit: 60, market: "BR", min_popularity: 60, max_popularity: 100, target_popularity: 90 }
+        if artists.present?
+          params[:seed_artists] = artists.pluck(:sptf_artist_id).join(",")
+        end
+        if genres.present?
+          params[:seed_genres] = genres.pluck(:sptf_gender_id_id).join(",")
+        end
+        artist_gender_recommendations = spotify_service.get_recommendations(limit: 60, market: "BR", min_popularity: 60, max_popularity: 100,
+                                                                            target_popularity: 90,
+                                                                            seed_artists: artists.pluck(:sptf_artist_id).join(","),
+                                                                            seed_genres: genres.pluck(:sptf_gender_id).join(","))
+      else
+        artist_gender_recommendations = { "tracks": [] }
+      end
 
       playlists = current_user.playlists.where(deleted_at: nil).order(Arel.sql("RANDOM()")).limit(2)
       track_ids = []
-      playlists_recommendations = []
+      playlists_recommendations = { "tracks": [] }
 
       playlists.each do |playlist|
         sptf_playlist = spotify_service.get_playlist playlist.sptf_playlist_id
@@ -33,7 +49,7 @@ class RecommendationsController < ApplicationController
                                                                         seed_tracks: track_ids.take(5).join(","))
       end
 
-      recommendations = [ *artist_gender_recommendations["tracks"], *playlists_recommendations["tracks"] ]
+      recommendations = [*artist_gender_recommendations["tracks"], *playlists_recommendations["tracks"]]
     end
 
     tracks = recommendations.select { |track|

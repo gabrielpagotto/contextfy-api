@@ -17,7 +17,7 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should handle spotify oauth2 callback and create new user" do
-    @spotify_service_mock.expect :set_access_token, nil, ["fake_access_token"]
+    @spotify_service_mock.expect :set_access_token, nil, [ "fake_access_token" ]
     @spotify_service_mock.expect :current_user_profile, @user_profile
 
     SpotifyService.stub :new, @spotify_service_mock do
