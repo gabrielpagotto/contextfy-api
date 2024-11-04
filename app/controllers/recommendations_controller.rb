@@ -13,7 +13,7 @@ class RecommendationsController < ApplicationController
       artists = current_user.artists.where(deleted_at: nil).order(Arel.sql("RANDOM()")).limit(3)
       genres = current_user.genders.where(deleted_at: nil).order(Arel.sql("RANDOM()")).limit(1)
 
-      unless artists.present? && genres.present? && artists.length > 3 && genres.length
+      unless artists.present? && genres.present? && artists.length >= 3 && genres.length >= 1
         render json: { "details": "To generate recommendations it is necessary to register at least 3 artists and 3 genres." }, status: :bad_request
         return
       end

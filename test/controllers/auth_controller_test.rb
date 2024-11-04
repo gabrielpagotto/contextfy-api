@@ -84,26 +84,38 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
     assert_equal @user.id, decoded_token["id"], "Token should contain the user ID"
   end
 
-  test "create_new_user should return a new user instance" do
-    sptf_token_type = "Bearer"
-    sptf_access_token = "fake_access_token"
-    sptf_expires_in = 3600
+  test "should redirect to Spotify OAuth2 URL" do
+    original_env = ENV.to_h
 
-    user = @controller.send(:create_new_user, "new_sptf_user_id", sptf_access_token, sptf_token_type, sptf_expires_in)
+    ENV["SPOTIFY_AUTH_HOST"] = "https://fictitious-accounts.spotify.com"
+    ENV["SPOTIFY_CLIENT_ID"] = "test_client_id"
+    ENV["SPOTIFY_REDIRECT_URI"] = "http://localhost:3000/auth/spotify/oauth2/test_callback"
+    ENV["SPOTIFY_SCOPE"] = "user-read-email user-library-read"
 
-    assert user.new_record?, "User should be a new record"
-    assert_equal "new_sptf_user_id", user.sptf_user_id
-    assert_equal sptf_token_type, user.sptf_token_type
-    assert_equal sptf_expires_in, user.sptf_expires_in
+    get auth_spotify_oauth2_url
+    assert_response :redirect
+    assert_match %r{^https://fictitious-accounts\.spotify\.com/authorize\?}, response.location
+
+  ensure
+    original_env.each { |key, value| ENV[key] = value }
   end
 
   test "spotify_oauth2_url should return a valid URL" do
-    url = @controller.send(:spotify_oauth2_url)
+    original_env = ENV.to_h
 
-    assert_match /https:\/\/fictitious-accounts\.spotify\.com\/authorize/, url, "URL should contain Spotify authorization endpoint"
+    ENV["SPOTIFY_AUTH_HOST"] = "https://fictitious-accounts.spotify.com"
+    ENV["SPOTIFY_CLIENT_ID"] = "test_client_id"
+    ENV["SPOTIFY_REDIRECT_URI"] = "http://localhost:3000/auth/spotify/oauth2/test_callback"
+    ENV["SPOTIFY_SCOPE"] = "user-read-email user-library-read"
+
+    url = @controller.send(:spotify_oauth2_url)
+    assert_match %r{^https://fictitious-accounts\.spotify\.com/authorize}, url, "URL should contain Spotify authorization endpoint"
     assert_match /response_type=code/, url, "URL should contain response_type parameter"
     assert_match /client_id=test_client_id/, url, "URL should contain client_id parameter"
     assert_match /redirect_uri=#{CGI.escape("http://localhost:3000/auth/spotify/oauth2/test_callback")}/, url, "URL should contain redirect_uri parameter"
     assert_match /scope=user-read-email\+user-library-read/, url, "URL should contain scopes parameter"
+
+  ensure
+    original_env.each { |key, value| ENV[key] = value }
   end
 end
