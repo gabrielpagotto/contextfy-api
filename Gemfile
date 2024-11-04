@@ -52,8 +52,8 @@ gem "webmock", "~> 3.24"
 
 gem "open-uri", "~> 0.4.1"
 
-gem 'rack-cors', require: 'rack/cors'
+gem "rack-cors", require: "rack/cors"
 
 gem "postgresql", "~> 1.0"
 
-gem "dotenv-rails", "~> 3.1", :groups => [:development, :test]
+gem "dotenv-rails", "~> 3.1", groups: [ :development, :test ]

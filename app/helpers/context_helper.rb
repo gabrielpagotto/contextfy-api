@@ -1,6 +1,5 @@
 module ContextHelper
   class HaversineCalculator
-
     EARTH_RADIUS_METERS = 6_371_000
 
     def self.haversine_distance(lat1, lon1, lat2, lon2)
@@ -38,5 +37,4 @@ module ContextHelper
       end
     end
   end
-
 end

@@ -1,5 +1,4 @@
 class SpotifyService
-
   def initialize
     @conn = Faraday.new(url: "#{SPOTIFY_API_URL}") do |faraday|
       faraday.adapter Faraday.default_adapter

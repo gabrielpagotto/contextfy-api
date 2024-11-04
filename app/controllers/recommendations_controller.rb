@@ -38,7 +38,7 @@ class RecommendationsController < ApplicationController
                                                                         seed_tracks: track_ids.take(5).join(","))
       end
 
-      recommendations = [*artist_gender_recommendations["tracks"], *playlists_recommendations["tracks"]]
+      recommendations = [ *artist_gender_recommendations["tracks"], *playlists_recommendations["tracks"] ]
     end
 
     tracks = recommendations.select { |track|

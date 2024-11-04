@@ -1,5 +1,4 @@
 class AuthController < ActionController::Base
-
   def spotify_service
     @spotify_service ||= SpotifyService.new
   end

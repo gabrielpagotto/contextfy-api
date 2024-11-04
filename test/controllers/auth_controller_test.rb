@@ -41,7 +41,7 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update existing user on spotify oauth2 callback" do
-    @spotify_service_mock.expect :set_access_token, nil, ["fake_access_token"]
+    @spotify_service_mock.expect :set_access_token, nil, [ "fake_access_token" ]
     @spotify_service_mock.expect :current_user_profile, { "id" => @existing_user.sptf_user_id }
 
     SpotifyService.stub :new, @spotify_service_mock do

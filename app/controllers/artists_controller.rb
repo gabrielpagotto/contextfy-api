@@ -1,5 +1,4 @@
 class ArtistsController < ApplicationController
-
   def index
     persisted_artists = current_user.artists.where(deleted_at: nil)
     unless persisted_artists.any?
@@ -12,6 +11,9 @@ class ArtistsController < ApplicationController
 
   def suggestions
     result = spotify_service.top_items(:artists)
+    unless result.empty?
+      result = spotify_service.search("a", :artist)["artists"]
+    end
     sptf_artist_ids = result["items"].map { |item| item["id"] }
     persisted_artists = current_user.artists.where(sptf_artist_id: sptf_artist_ids, deleted_at: nil)
     render json: map_artists(result["items"], persisted_artists)
