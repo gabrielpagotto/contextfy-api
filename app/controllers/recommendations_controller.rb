@@ -18,21 +18,10 @@ class RecommendationsController < ApplicationController
         return
       end
 
-      if artists.present? || genres.present?
-        params = { limit: 60, market: "BR", min_popularity: 60, max_popularity: 100, target_popularity: 90 }
-        if artists.present?
-          params[:seed_artists] = artists.pluck(:sptf_artist_id).join(",")
-        end
-        if genres.present?
-          params[:seed_genres] = genres.pluck(:sptf_gender_id_id).join(",")
-        end
-        artist_gender_recommendations = spotify_service.get_recommendations(limit: 60, market: "BR", min_popularity: 60, max_popularity: 100,
-                                                                            target_popularity: 90,
-                                                                            seed_artists: artists.pluck(:sptf_artist_id).join(","),
-                                                                            seed_genres: genres.pluck(:sptf_gender_id).join(","))
-      else
-        artist_gender_recommendations = { "tracks": [] }
-      end
+      artist_gender_recommendations = spotify_service.get_recommendations(limit: 60, market: "BR", min_popularity: 60, max_popularity: 100,
+                                                                          target_popularity: 90,
+                                                                          seed_artists: artists.pluck(:sptf_artist_id).join(","),
+                                                                          seed_genres: genres.pluck(:sptf_gender_id).join(","))
 
       playlists = current_user.playlists.where(deleted_at: nil).order(Arel.sql("RANDOM()")).limit(2)
       track_ids = []
