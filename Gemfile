@@ -50,7 +50,7 @@ gem "faraday", "~> 2.12"
 
 gem "webmock", "~> 3.24"
 
-gem "open-uri", "~> 0.4.1"
+gem "open-uri", "~> 0.5.0"
 
 gem "rack-cors", require: "rack/cors"
 
