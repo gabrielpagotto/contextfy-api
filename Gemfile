@@ -42,7 +42,7 @@ end
 
 gem "rails-controller-testing", "~> 1.0"
 
-gem "jwt", "~> 2.9"
+gem "jwt", "~> 2.10"
 
 gem "bcrypt", "~> 3.1"
 
